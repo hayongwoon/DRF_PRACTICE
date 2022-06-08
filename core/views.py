@@ -6,5 +6,8 @@ from django.http import HttpResponse, JsonResponse
 
 
 def index(request):
-
-    return JsonResponse({'message': 'success'})
+    data = {
+        'message': 'success'
+    }
+    
+    return JsonResponse(data)
