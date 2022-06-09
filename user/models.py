@@ -12,12 +12,14 @@ class User(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.ForeignKey(to=User, verbose_name="사용자", on_delete=models.CASCADE, unique=True)
+    user = models.OneToOneField(to=User, verbose_name="사용자", on_delete=models.CASCADE)
     hobby = models.ManyToManyField(to='Hobby', verbose_name="취미") #to=문자열 은 하비 모델이 해당 선언 시 보다 아래에 있어서 ''를 붙여줘야한다.
     introduction = models.TextField("소개")
     birthday = models.DateField("생일")
     age = models.IntegerField("나이")
 
+    def __str__(self) -> str:
+        return f'{self.user.username}님의 프로필 입니다.'
 
 class Hobby(models.Model):
     name = models.CharField("취미", max_length=50)
