@@ -17,7 +17,7 @@ class BronzeRank(permissions.BasePermission):
 
 class UserView(APIView): # CBV 방식
     permission_classes = [BronzeRank]
-    permission_classes = [permissions.AllowAny] # 누구나 view 조회 가능
+    # permission_classes = [permissions.AllowAny] # 누구나 view 조회 가능
     # permission_classes = [permissions.IsAdminUser] # admin만 view 조회 가능
     # permission_classes = [permissions.IsAuthenticated] # 로그인 된 사용자만 view 조회 가능
 
