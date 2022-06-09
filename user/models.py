@@ -1,6 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser
 
-class User(models.Model):
+class User(AbstractBaseUser):
     username = models.CharField("사용자 계정", max_length=20, unique=True)
     email = models.EmailField("이메일 주소", max_length=100, unique=True)
     password = models.CharField("비밀번호", max_length=60)
