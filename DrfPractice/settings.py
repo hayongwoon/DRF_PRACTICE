@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # drf 추가 앱
     'rest_framework',
     'core',
+    'user',
     
     
 ]
