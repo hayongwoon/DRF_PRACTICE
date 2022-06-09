@@ -6,6 +6,7 @@ class User(models.Model):
     password = models.CharField("비밀번호", max_length=60)
     fullname = models.CharField("이름", max_length=20)
     join_date = models.DateTimeField("가입일", auto_now_add=True)
+    user_rank = models.IntegerField('회원 등급', default=1)
 
     def __str__(self):
         return self.username
