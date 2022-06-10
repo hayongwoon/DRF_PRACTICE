@@ -1,16 +1,31 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import UserManager
+
 
 class User(AbstractBaseUser):
+    objects = UserManager()
     username = models.CharField("사용자 계정", max_length=20, unique=True)
     email = models.EmailField("이메일 주소", max_length=100, unique=True)
     password = models.CharField("비밀번호", max_length=60)
     fullname = models.CharField("이름", max_length=20)
     join_date = models.DateTimeField("가입일", auto_now_add=True)
     user_rank = models.IntegerField('회원 등급', default=1)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=True)
+    
+
+    USERNAME_FIELD = 'username'
 
     def __str__(self):
         return self.username
+
+    def has_perm(self, perm, obj=None):
+        return self.is_superuser
+
+    def has_module_perms(self, app_label):
+        return self.is_superuser
 
 
 class UserProfile(models.Model):
