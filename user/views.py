@@ -26,13 +26,22 @@ class UserView(APIView): # CBV 방식
     def get(self, request):
         user = User.objects.get(id=5)
         hobbys = list(user.userprofile.hobby.all())
+        
+        # dir()과 eval()을 통한 user와 관련된 메소드 도출!
+        # for command in dir(user):
+        #     try:
+        #         print(f'user.{command} :', eval(f'user.{command}'))
+        #     except:
+        #         pass
+                
         for hobby in hobbys:
             # exclde : 매칭 된 쿼리만 제외, filter와 반대
             # annotate : 필드 이름을 변경해주기 위해 사용, 이외에도 원하는 필드를 추가하는 등 다양하게 활용 가능
             # values / values_list : 지정한 필드만 리턴 할 수 있음. values는 dict로 return, values_list는 tuple로 ruturn
             # F() : 객체에 해당되는 쿼리를 생성함
             hobby_members = hobby.userprofile_set.exclude(user=user).annotate(username=F('user__username')).values_list('username', flat=True)
-            print(str(hobby_members.query))
+            # print(str(hobby_members.query))
+            # print(hobby.userprofile_set)
             # print(hobby.userprofile_set.all())
             # print(hobby.userprofile_set.exclude(user=user))
             # print(hobby.userprofile_set.exclude(user=user).annotate(username=F('user__username')))
