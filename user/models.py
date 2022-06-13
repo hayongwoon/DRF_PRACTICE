@@ -30,7 +30,7 @@ class User(AbstractBaseUser):
     fullname = models.CharField("이름", max_length=20)
     join_date = models.DateTimeField("가입일", auto_now_add=True)
 
-		# is_active가 False일 경우 계정이 비활성화됨
+	# is_active가 False일 경우 계정이 비활성화됨
     is_active = models.BooleanField(default=True) 
 
     # is_staff에서 해당 값 사용
