@@ -6,7 +6,7 @@ from .models import Article
 
 # Create your views here.
 class BlogApiVeiw(APIView):
-    #로그인 한 사용자 게시글 정보 보여주는 view
+    #로그인 한 사용자의 정보, 게시글을 보여주는 기능
     def get(self, request):
         user = request.user
         if user.is_authenticated:
