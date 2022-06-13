@@ -18,4 +18,5 @@ class Article(models.Model):
     category = models.ManyToManyField(Category, verbose_name='카테고리')
     content = models.TextField('내용', max_length=500)
 
-    
+    def __str__(self) -> str:
+        return f'작성자 : {self.user}, 제목 : {self.title}'
