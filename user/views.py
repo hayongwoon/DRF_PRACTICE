@@ -3,6 +3,8 @@ from rest_framework.views import APIView
 from rest_framework import permissions
 from .models import User, Hobby, UserProfile
 from django.db.models import Count, F, Value
+from django.contrib.auth import authenticate, login
+from rest_framework import status
 
 # Permission custom
 class BronzeRank(permissions.BasePermission):
@@ -46,7 +48,7 @@ class UserView(APIView): # CBV 방식
             # print(hobby.userprofile_set.exclude(user=user))
             # print(hobby.userprofile_set.exclude(user=user).annotate(username=F('user__username')))
             # print(hobby.userprofile_set.exclude(user=user).annotate(username=F('user__username')).values_list('username', flat=True))
-            # print(f"hobby : {hobby.name} / hobby members : {hobby_members}")
+            print(f"hobby : {hobby.name} / hobby members : {hobby_members}")
 
         return Response({'message': 'get method!!'})
         
@@ -58,3 +60,17 @@ class UserView(APIView): # CBV 방식
 
     def delete(self, request):
         return Response({'message': 'delete method!!'})
+
+
+class UserApiView(APIView):
+    # 로그인
+    def post(self, request):
+        username = request.data.get('username', '')
+        password = request.data.get('password', '')
+
+        user = authenticate(request, username=username, password=password)
+        if not user:
+            return Response({"error": "존재하지 않는 계정이거나 패스워드가 일치하지 않습니다."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        login(request, user)
+        return Response({"message": "로그인 성공!!"}, status=status.HTTP_200_OK)
