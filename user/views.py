@@ -5,6 +5,8 @@ from .models import User, Hobby, UserProfile
 from django.db.models import Count, F, Value
 from django.contrib.auth import authenticate, login
 from rest_framework import status
+from blog.models import Article
+from user.serializers import UserSerializer
 
 # Permission custom
 class BronzeRank(permissions.BasePermission):
@@ -63,17 +65,6 @@ class UserView(APIView): # CBV 방식
 
 
 class UserApiView(APIView):
-    # 로그인 한 사용자의 정보, 게시글을 보여주는 기능
-    def get(self, request):
-        user = request.user
-        data = {
-            'username': user.username,
-            'email': user.email,
-            'password': user.password
-        }
-
-        return Response(data)
-
     # 로그인
     def post(self, request):
         username = request.data.get('username', '')
@@ -85,3 +76,10 @@ class UserApiView(APIView):
 
         login(request, user)
         return Response({"message": "로그인 성공!!"}, status=status.HTTP_200_OK)
+
+    def get(self, request):
+        user = request.user
+        # serializer에 queryset을 인자로 줄 경우 many=True 옵션을 사용해야 한다.
+        serialized_user_data = UserSerializer(user).data
+        return Response(serialized_user_data, status=status.HTTP_200_OK)
+    
