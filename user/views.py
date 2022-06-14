@@ -42,13 +42,13 @@ class UserView(APIView): # CBV 방식
             # values / values_list : 지정한 필드만 리턴 할 수 있음. values는 dict로 return, values_list는 tuple로 ruturn
             # F() : 객체에 해당되는 쿼리를 생성함
             hobby_members = hobby.userprofile_set.exclude(user=user).annotate(username=F('user__username')).values_list('username', flat=True)
-            # print(str(hobby_members.query))
+            print(str(hobby_members.query))
             # print(hobby.userprofile_set)
             # print(hobby.userprofile_set.all())
             # print(hobby.userprofile_set.exclude(user=user))
             # print(hobby.userprofile_set.exclude(user=user).annotate(username=F('user__username')))
             # print(hobby.userprofile_set.exclude(user=user).annotate(username=F('user__username')).values_list('username', flat=True))
-            print(f"hobby : {hobby.name} / hobby members : {hobby_members}")
+            # print(f"hobby : {hobby.name} / hobby members : {hobby_members}")
 
         return Response({'message': 'get method!!'})
         
@@ -63,6 +63,17 @@ class UserView(APIView): # CBV 방식
 
 
 class UserApiView(APIView):
+    # 로그인 한 사용자의 정보, 게시글을 보여주는 기능
+    def get(self, request):
+        user = request.user
+        data = {
+            'username': user.username,
+            'email': user.email,
+            'password': user.password
+        }
+
+        return Response(data)
+
     # 로그인
     def post(self, request):
         username = request.data.get('username', '')
