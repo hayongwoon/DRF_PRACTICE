@@ -1,8 +1,10 @@
 from rest_framework import serializers
+from blog.serializers import ArticleSerializer
 
 from user.models import User as UserModel
 from user.models import UserProfile as UserProfileModel
 from user.models import Hobby as HobbyModel
+from blog.models import Article as ArticleModel
 
 class UserProfileSerializer(serializers.ModelSerializer):
    class Meta:
