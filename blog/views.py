@@ -1,10 +1,12 @@
+from unicodedata import name
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Article
+from .models import Article, Category
 from rest_framework import status
 from blog.serializers import ArticleSerializer
-from user.serializers import UserSerializer
+from blog.services.article_service import create_an_article
+from user.models import User
 
 
 # Create your views here.
@@ -19,4 +21,13 @@ class BlogApiVeiw(APIView):
     # 게시글은 계정 생성 후 3일 이상 지난 사용자만 생성할 수 있도록 권한을 설정
     # 테스트 코드에서는 계정 생성 후 3분 이상 지난 사용자는 게시글을 작성할 수 있도록 설정
     def post(self, request):
-        return Response({'message': 'post method!!'})
+        try:
+            create_an_article(title=request.data.get('title'),
+                           user_id=User.objects.get(id=5),
+                           content=request.data.get('content'),
+                           category=request.data.get('category'),)
+                           
+            return Response({'result': '게시글이 생성 되었습니다.'}, status=status.HTTP_201_CREATED)
+
+        except TypeError:
+            return Response({'msg': "항목을 다시 확인 해 주세요."}, status=status.HTTP_404_NOT_FOUND)
