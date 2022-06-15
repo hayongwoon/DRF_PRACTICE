@@ -7,6 +7,20 @@ from rest_framework import status
 from blog.serializers import ArticleSerializer
 from blog.services.article_service import create_an_article
 from user.models import User
+from rest_framework.permissions import BasePermission
+from datetime import timedelta
+from django.utils import timezone
+
+# Permission custom
+# 게시글은 계정 생성 후 3일 이상 지난 사용자만 생성할 수 있도록 권한
+class RegistedMoreThan3daysUser(BasePermission):
+    """
+    가입일 기준 1주일 이상 지난 사용자만 접근 가능
+    """
+    message = '가입 후 1주일 이상 지난 사용자만 사용하실 수 있습니다.'
+    
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.join_date < (timezone.now() - timedelta(days=3))
 
 
 # Create your views here.
@@ -21,11 +35,12 @@ class BlogApiVeiw(APIView):
     # 게시글은 계정 생성 후 3일 이상 지난 사용자만 생성할 수 있도록 권한을 설정
     # 테스트 코드에서는 계정 생성 후 3분 이상 지난 사용자는 게시글을 작성할 수 있도록 설정
     def post(self, request):
+        # permission_classes = [permissions.RegistedMoreThan3daysUser]
         try:
             create_an_article(title=request.data.get('title'),
-                           user_id=User.objects.get(id=5),
+                           user_id=User.objects.get(id=5), # 우선 로그인한 유저를 해장 값으로 설정해보자.
                            content=request.data.get('content'),
-                           category=request.data.get('category'),)
+                           category=request.data.get('category'),) #외래키일 경우 
                            
             return Response({'result': '게시글이 생성 되었습니다.'}, status=status.HTTP_201_CREATED)
 
