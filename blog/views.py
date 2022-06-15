@@ -1,4 +1,4 @@
-from unicodedata import name
+from unicodedata import category, name
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -35,7 +35,7 @@ class BlogApiVeiw(APIView):
     # 게시글은 계정 생성 후 3일 이상 지난 사용자만 생성할 수 있도록 권한을 설정
     # 테스트 코드에서는 계정 생성 후 3분 이상 지난 사용자는 게시글을 작성할 수 있도록 설정
     def post(self, request):
-        # permission_classes = [permissions.RegistedMoreThan3daysUser]
+        # permission_classes = [RegistedMoreThan3daysUser]
         try:
             create_an_article(title=request.data.get('title'),
                            user_id=User.objects.get(id=5), # 우선 로그인한 유저를 해장 값으로 설정해보자.

@@ -6,4 +6,4 @@ def create_an_article(title, user_id, category, content):
     article.save()
     category = Category.objects.get(name=category)
     article.category.add(category)
-    return article  
+    return article
