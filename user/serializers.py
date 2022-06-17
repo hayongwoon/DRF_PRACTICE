@@ -1,3 +1,4 @@
+from django.urls import is_valid_path
 from rest_framework import serializers
 from blog.serializers import ArticleSerializer
 
@@ -13,7 +14,7 @@ class HobbySerializer(serializers.ModelSerializer):
     def get_people_with_my_hobby(self, obj): 
         #취미 객체로 부터 자신을 참조하고있는 모든 프로필을 가져오고 그 프로필의 유저네임을 가져온다.
         #나를 제외하고 가져올 수는 없을까...? exclude(user=user)를 사용하려면 hobby의 객체들의 근원지인 user를 가져와야하는데....
-        return [user_profile.user.fullname for user_profile in obj.userprofile_set.all()]
+        return [user_profile.user.fullname for user_profile in obj.userprofile_set.exclude(user=self.context['request'].user)]
 
     class Meta:
         # serializer에 사용될 model, field지정

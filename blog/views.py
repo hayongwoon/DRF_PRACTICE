@@ -27,7 +27,8 @@ class RegistedMoreThan3daysUser(BasePermission):
 class BlogApiVeiw(APIView):
     # 로그인 한 사용자의 정보와 게시글을 보여주는 기능
     def get(self, request):
-        articles = Article.objects.all()        # serializer에 queryset을 인자로 줄 경우 many=True 옵션을 사용해야 한다.
+        user = request.user
+        articles = Article.objects.filter(user=user)        # serializer에 queryset을 인자로 줄 경우 many=True 옵션을 사용해야 한다.
         serialized_article_data = ArticleSerializer(articles, many=True).data
 
         return Response(serialized_article_data, status=status.HTTP_200_OK)
@@ -35,13 +36,14 @@ class BlogApiVeiw(APIView):
     # 게시글은 계정 생성 후 3일 이상 지난 사용자만 생성할 수 있도록 권한을 설정
     # 테스트 코드에서는 계정 생성 후 3분 이상 지난 사용자는 게시글을 작성할 수 있도록 설정
     def post(self, request):
-        # permission_classes = [RegistedMoreThan3daysUser]
+        # permission_classes = [RegistedMoreThan3daysUser] 
         try:
             create_an_article(title=request.data.get('title'),
                            user_id=User.objects.get(id=5), # 우선 로그인한 유저를 해장 값으로 설정해보자.
                            content=request.data.get('content'),
                            category=request.data.get('category'),) #외래키일 경우 
-                           
+            
+
             return Response({'result': '게시글이 생성 되었습니다.'}, status=status.HTTP_201_CREATED)
 
         except TypeError:

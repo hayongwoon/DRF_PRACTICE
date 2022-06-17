@@ -77,10 +77,11 @@ class UserApiView(APIView):
         login(request, user)
         return Response({"message": "로그인 성공!!"}, status=status.HTTP_200_OK)
 
+
     # 로그인 한 유저의 모든 정보
     def get(self, request):
         user = request.user
         # serializer에 queryset을 인자로 줄 경우 many=True 옵션을 사용해야 한다.
-        serialized_user_data = UserSerializer(user).data
+        serialized_user_data = UserSerializer(user, context={'request':request}).data
         return Response(serialized_user_data, status=status.HTTP_200_OK)
     
