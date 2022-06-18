@@ -4,7 +4,7 @@ from product.models import Event as EventModel
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventModel
-        fields = "__all__"
+        fields = ["title", "content", "start_propose_date", "end_propose_date"]
 
 
 
