@@ -20,7 +20,6 @@ class ProductApiVeiw(APIView):
 
     #이벤트 생성
     def post(self, request):
-        print(request.data)
         serialized_event_data = EventSerializer(data=request.data)
         if serialized_event_data.is_valid():
             serialized_event_data.save()

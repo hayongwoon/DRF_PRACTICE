@@ -18,5 +18,6 @@ from .views import ProductApiVeiw
 
 urlpatterns = [
     path('', ProductApiVeiw.as_view()),
+    path('<obj_id>/', ProductApiVeiw.as_view()),
 
 ]
